@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { QrReader } from 'react-qr-scanner';
+import { useState } from 'react';
+import { Scanner } from '@yudiel/react-qr-scanner';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -12,13 +12,13 @@ export const QRScanner = ({ onScan, onClose }: QRScannerProps) => {
   const [error, setError] = useState<string>('');
 
   const handleScan = (result: any) => {
-    if (result?.text) {
-      onScan(result.text);
+    if (result && result[0]?.rawValue) {
+      onScan(result[0].rawValue);
     }
   };
 
   const handleError = (err: any) => {
-    console.error(err);
+    console.error('QR Scanner error:', err);
     setError('Failed to access camera. Please ensure camera permissions are granted.');
   };
 
@@ -31,14 +31,27 @@ export const QRScanner = ({ onScan, onClose }: QRScannerProps) => {
             <p className="text-sm text-muted-foreground">Align the QR code inside the frame</p>
           </div>
 
-          <div className="relative rounded-lg overflow-hidden border-4 border-primary/50 animate-pulse">
-            <QrReader
-              delay={300}
-              onError={handleError}
+          <div className="relative rounded-lg overflow-hidden border-4 border-primary/50">
+            <Scanner
               onScan={handleScan}
-              style={{ width: '100%' }}
+              onError={handleError}
               constraints={{
-                video: { facingMode: 'environment' }
+                facingMode: 'environment'
+              }}
+              styles={{
+                container: {
+                  width: '100%',
+                  paddingTop: '100%',
+                  position: 'relative'
+                },
+                video: {
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover'
+                }
               }}
             />
             <div className="absolute inset-0 border-4 border-primary animate-pulse pointer-events-none" />
