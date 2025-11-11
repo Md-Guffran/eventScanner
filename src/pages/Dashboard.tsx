@@ -107,6 +107,36 @@ export default function Dashboard() {
     fetchUser();
   };
 
+  const handleProceedToDay2 = async () => {
+    if (!user || user.day !== 1) return;
+
+    const { error } = await supabase
+      .from('users')
+      .update({ 
+        day: 2,
+        entrance: false,
+        lunch: false,
+        dinner: false 
+      })
+      .eq('id', user.id);
+
+    if (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to proceed to Day 2',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    toast({
+      title: 'Welcome to Day 2!',
+      description: 'Your check-in progress has been reset.',
+    });
+
+    fetchUser();
+  };
+
   useEffect(() => {
     fetchUser();
   }, [qrCode]);
@@ -210,7 +240,10 @@ export default function Dashboard() {
 
         {/* Completion Message */}
         {isComplete && (
-          <div className="text-center p-6 bg-success/20 border-2 border-success rounded-lg glow-success">
+          <div 
+            className="text-center p-6 bg-success/20 border-2 border-success rounded-lg glow-success"
+            onClick={user.day === 1 ? handleProceedToDay2 : undefined}
+          >
             <h2 className="text-2xl font-bold text-success mb-2">
               {user.day === 1 ? "🎉 Day 1 Complete!" : "✅ Event Complete!"}
             </h2>
