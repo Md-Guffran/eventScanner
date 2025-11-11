@@ -7,7 +7,10 @@ import { useToast } from '@/hooks/use-toast';
 import * as XLSX from 'xlsx';
 import QRCode from 'qrcode';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Download, Upload } from 'lucide-react';
+import { Download, Upload, UserPlus } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface User {
   id: string;
@@ -24,6 +27,12 @@ export default function Admin() {
   const [password, setPassword] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
+  const [spotRegOpen, setSpotRegOpen] = useState(false);
+  const [spotName, setSpotName] = useState('');
+  const [spotEmail, setSpotEmail] = useState('');
+  const [spotDay, setSpotDay] = useState('2');
+  const [generatedQR, setGeneratedQR] = useState<string>('');
+  const [qrDataUrl, setQrDataUrl] = useState<string>('');
   const { toast } = useToast();
 
   const ADMIN_PASSWORD = 'admin123'; // Demo password
@@ -130,6 +139,56 @@ export default function Admin() {
     }
   };
 
+  const handleSpotRegistration = async () => {
+    if (!spotName.trim() || !spotEmail.trim()) {
+      toast({
+        title: 'Error',
+        description: 'Please fill in all fields',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const qrCode = `EVENT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    
+    const { error } = await supabase.from('users').insert({
+      name: spotName,
+      email: spotEmail,
+      day: parseInt(spotDay),
+      qr_code: qrCode,
+    });
+
+    if (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to register participant',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Generate QR code image
+    const url = await QRCode.toDataURL(qrCode, { width: 400 });
+    setQrDataUrl(url);
+    setGeneratedQR(qrCode);
+
+    toast({
+      title: 'Success!',
+      description: 'Participant registered. QR code generated.',
+    });
+
+    fetchUsers();
+  };
+
+  const handleCloseSpotReg = () => {
+    setSpotRegOpen(false);
+    setSpotName('');
+    setSpotEmail('');
+    setSpotDay('2');
+    setGeneratedQR('');
+    setQrDataUrl('');
+  };
+
   if (!authenticated) {
     return (
       <div className="min-h-screen gradient-bg flex items-center justify-center p-4">
@@ -169,6 +228,81 @@ export default function Admin() {
         {/* Actions */}
         <Card className="p-6">
           <div className="flex gap-4 flex-wrap">
+            <Dialog open={spotRegOpen} onOpenChange={setSpotRegOpen}>
+              <DialogTrigger asChild>
+                <Button>
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Spot Registration
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Spot Registration</DialogTitle>
+                </DialogHeader>
+                {!generatedQR ? (
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Name</Label>
+                      <Input
+                        id="name"
+                        placeholder="Participant name"
+                        value={spotName}
+                        onChange={(e) => setSpotName(e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="participant@email.com"
+                        value={spotEmail}
+                        onChange={(e) => setSpotEmail(e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="day">Day</Label>
+                      <Select value={spotDay} onValueChange={setSpotDay}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select day" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1">Day 1</SelectItem>
+                          <SelectItem value="2">Day 2</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button onClick={handleSpotRegistration} className="w-full">
+                      Generate QR Code
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-4 text-center">
+                    <p className="text-lg font-semibold text-primary">{spotName}</p>
+                    <p className="text-sm text-muted-foreground">Day {spotDay}</p>
+                    <div className="bg-background p-4 rounded-lg">
+                      <img src={qrDataUrl} alt="QR Code" className="mx-auto" />
+                    </div>
+                    <p className="text-xs text-muted-foreground break-all">{generatedQR}</p>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => downloadQRCode(generatedQR, spotName)}
+                        className="flex-1"
+                      >
+                        Download QR
+                      </Button>
+                      <Button
+                        onClick={handleCloseSpotReg}
+                        variant="outline"
+                        className="flex-1"
+                      >
+                        Close
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </DialogContent>
+            </Dialog>
             <Button asChild>
               <label className="cursor-pointer">
                 <Upload className="w-4 h-4 mr-2" />
