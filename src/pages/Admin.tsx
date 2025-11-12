@@ -194,8 +194,8 @@ export default function Admin() {
       <div className="min-h-screen gradient-bg flex items-center justify-center p-4">
         <Card className="w-full max-w-md p-8 space-y-6">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-primary mb-2">Admin Dashboard</h1>
-            <p className="text-muted-foreground">Enter password to continue</p>
+            <h1 className="text-3xl font-bold text-white mb-2">Admin Dashboard</h1>
+            <p className="text-white">Enter password to continue</p>
           </div>
 
           <div className="space-y-4">
@@ -206,7 +206,7 @@ export default function Admin() {
               onChange={(e) => setPassword(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
             />
-            <Button onClick={handleLogin} className="w-full">
+            <Button onClick={handleLogin} className="w-full text-white bg-color-#E7E7E7">
               Login
             </Button>
           </div>
@@ -315,8 +315,8 @@ export default function Admin() {
                 />
               </label>
             </Button>
-            <Button onClick={handleExport} variant="secondary">
-              <Download className="w-4 h-4 mr-2" />
+            <Button onClick={handleExport} variant="secondary" className="text-white">
+              <Download className="w-4 h-4 mr-2 text-white" />
               Export Data
             </Button>
           </div>

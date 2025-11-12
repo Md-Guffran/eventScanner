@@ -22,10 +22,10 @@ const Index = () => {
             <div className="text-6xl mb-4">🎫</div>
             
             {/* Title */}
-            <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 text-white">
               Event Check-In
             </h1>
-            <p className="text-xl text-muted-foreground mb-8">
+            <p className="text-xl text-muted-foreground mb-8 text-white">
               Scan your QR code to check in and track your event progress
             </p>
 
@@ -33,7 +33,7 @@ const Index = () => {
             <Button
               size="lg"
               onClick={() => setShowScanner(true)}
-              className="text-lg px-8 py-6 glow-primary hover:scale-105 transition-transform"
+              className="text-lg px-8 py-6 glow-primary hover:scale-105 transition-transform text-white bg-color-#E7E7E7"
             >
               🔍 Scan QR to Check In
             </Button>
@@ -41,16 +41,13 @@ const Index = () => {
             {/* Feature Points */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12 text-sm text-muted-foreground">
               <div className="space-y-2">
-                <div className="text-2xl">⚡</div>
-                <div>Instant Check-In</div>
+                <div className="text-2xl"></div>
               </div>
               <div className="space-y-2">
-                <div className="text-2xl">📊</div>
-                <div>Live Progress Tracking</div>
+                <div className="text-2xl"></div>
               </div>
               <div className="space-y-2">
-                <div className="text-2xl">🎉</div>
-                <div>Real-Time Updates</div>
+                <div className="text-2xl"></div>
               </div>
             </div>
 

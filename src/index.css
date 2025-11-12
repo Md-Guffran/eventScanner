@@ -12,13 +12,13 @@ All colors MUST be HSL.
     --background: 274 91% 18%;
     --foreground: 180 100% 98%;
 
-    --card: 274 80% 22%;
-    --card-foreground: 180 100% 98%;
+    --card: 269 71% 46%;
+    --card-foreground: 180 10% 98%;
 
     --popover: 274 85% 20%;
     --popover-foreground: 180 100% 98%;
 
-    --primary: 180 100% 50%;
+    --primary: 0 0% 100%;
     --primary-foreground: 274 91% 18%;
 
     --secondary: 274 85% 28%;
@@ -43,13 +43,13 @@ All colors MUST be HSL.
     --radius: 1rem;
 
     /* Custom gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(274 91% 18%), hsl(180 100% 35%));
-    --gradient-glow: linear-gradient(135deg, hsl(180 100% 50% / 0.2), hsl(73 100% 50% / 0.2));
+    --gradient-primary: linear-gradient(135deg, hsl(0, 100%, 2%), hsl(0, 0%, 0%));
+    --gradient-glow: linear-gradient(135deg, hsla(180, 32%, 36%, 0.2), hsl(73 100% 50% / 0.2));
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --glow-primary: 0 0 20px hsl(180 100% 50% / 0.5);
-    --glow-success: 0 0 20px hsl(73 100% 50% / 0.6);
+    --glow-primary: 0 0 20px hsl(180, 57%, 79% / 0.5);
+    --glow-success: 0 0 20px hsla(144, 66%, 67%, 0.6);
   }
 }
 
