@@ -23,7 +23,7 @@ export const QRScanner = ({ onScan, onClose }: QRScannerProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background-black backdrop-blur-sm animate-fade-in">
       <Card className="w-full max-w-md p-6 border-2 border-primary glow-primary">
         <div className="space-y-4">
           <div className="text-center">
