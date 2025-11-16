@@ -8,6 +8,7 @@ CREATE TABLE public.users (
   entrance BOOLEAN NOT NULL DEFAULT false,
   lunch BOOLEAN NOT NULL DEFAULT false,
   dinner BOOLEAN NOT NULL DEFAULT false,
+  type TEXT NOT NULL CHECK (type IN ('alumni', 'faculty')), -- Added type column
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
@@ -57,6 +58,7 @@ WITH CHECK (true);
 -- Create indexes for better performance
 CREATE INDEX idx_users_qr_code ON public.users(qr_code);
 CREATE INDEX idx_users_day ON public.users(day);
+CREATE INDEX idx_users_type ON public.users(type); -- Index for type column
 CREATE INDEX idx_checkins_user_id ON public.checkins(user_id);
 CREATE INDEX idx_checkins_type ON public.checkins(type);
 
